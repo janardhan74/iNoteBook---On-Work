@@ -2,7 +2,7 @@ import React,{useContext} from "react";
 import NoteContext from '../context/notes/NoteContext';
 const Home = () => {
   // console.log(NoteContext);
-  const a  = useContext(NoteContext)
+  // const a  = useContext(NoteContext)
   // console.log("context",context)
   // const {notes } = a;
 

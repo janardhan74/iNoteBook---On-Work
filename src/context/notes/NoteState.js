@@ -42,7 +42,7 @@ const NoteState = (props) => {
       }
     ]
 
-    const {notes , setNotes} = useState(intialNotes);
+    const [notes , setNotes] = useState(intialNotes);
 
     
   return (
