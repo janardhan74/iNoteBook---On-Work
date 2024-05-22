@@ -9,7 +9,7 @@ const fetchuser = require("../middleware/fetchuser");
 const JWT_SECERET = "harryisagoodb$oy";
 
 // ROUTE 1 :  create a user using : POST "api/auth/" . Doestn't require auth
-// req -> creating user by name , email,password
+// body -> email , password
 // res -> authentication token
 
 router.post(
@@ -27,12 +27,12 @@ router.post(
       console.log("data", req.body);
       if (!errors.isEmpty()) {
         // checking if there are any validation errors
-        return res.status(200).json({ errors: errors.array() });
+        return res.status(200).json({success:false,errors: errors.array() });
       }
       // check if user with this email already exists or not
       let usr = await User.findOne({ email: req.body.email });
       if (usr) {
-        return res.send("the user with this email is already exists");
+        return res.json({success:false,error:"the user with this email is already exists"});
       }
       // creating user
       const salt = await bcrypt.genSaltSync(10);
@@ -53,10 +53,10 @@ router.post(
 
       const authToken = jwt.sign(data, JWT_SECERET); // creating a aunthetication token for storing in local storage in user device
 
-      res.json({ authToken }); // sending authentication token as a response
+      res.json({success:true,authToken}); // sending authentication token as a response
     } catch (e) {
       // catching if there are any errors occurred
-      res.send("error occurred", e.message); // send error as response if ther are occurred
+      res.json({success:false,error:e.message}); // send error as response if ther are occurred
     }
     // res.send(req.body)
   }
@@ -76,7 +76,7 @@ router.post(
     // console.log("data: ",req.body)
     if (!errors.isEmpty()) {
       console.log("validation faliled");
-      return res.status(400).send({ errors: errors.array() });
+      return res.status(400).send({success:false,error: errors.array() });
     }
 
     const { email, password } = req.body;
@@ -84,7 +84,7 @@ router.post(
     try {
       let user = await User.findOne({ email: email });
       if (!user) {
-        return res.json({ error: "the email you entered is not exist" });
+        return res.json({ success:false, error: "the email you entered is not exist" });
       }
 
       console.log(user);
@@ -92,7 +92,7 @@ router.post(
       let passwordCompare = await bcrypt.compare(password, user.password);
 
       if (!passwordCompare) {
-        return res.json({ error: "please login with correct credentials" });
+        return res.json({success:false, error: "please login with correct credentials" });
       }
 
       const data = {
@@ -102,9 +102,9 @@ router.post(
       };
 
       const authToken = jwt.sign(data, JWT_SECERET);
-      res.json({ authToken });
+      res.json({success:true, authToken });
     } catch {
-      res.status(400).json({ error: e.message });
+      res.status(400).json({success:false, error: e.message });
     }
   }
 );

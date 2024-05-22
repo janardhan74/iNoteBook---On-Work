@@ -14,7 +14,8 @@ router.get("/fetchallnotes", fetchuser, async (req, res) => {
 });
 
 // ROUTE 2 : add a new note using : POST : /api/notes/addnote - Login Required
-// req -> authentication token -> user id  and  body -> title , desc , [tag] , [date]
+// headers -> authentication token 
+// body -> title , desc , [tag] , [date]
 // res -> created note
 
 router.post(

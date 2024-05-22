@@ -1,5 +1,6 @@
 const express = require('express')
 const connectToMongo = require('./db')
+const cors = require("cors")
 connectToMongo()
 const app = express()
 const port = 3000
@@ -8,6 +9,7 @@ const port = 3000
 //   res.send('Hello World!')
 // })
 
+app.use(cors())
 app.use(express.json())
 // The express.json() function is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser. 
 
